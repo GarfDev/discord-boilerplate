@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "incremental": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "module": "CommonJS",
+    "lib": ["es6"],
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noEmit": false,
+    "strict": true,
+    "target": "esnext",
+    "baseUrl": "./src"
+  },
+  "typeRoots": ["src/global.d.ts"],
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
+}
