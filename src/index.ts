@@ -4,8 +4,6 @@ import { config } from "./configs";
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-globalThis.client = client;
-
 client.on("ready", () => {
   console.log(`Logged in as ${client.user?.tag}!`);
   slashRegister(client.user?.id || '');
