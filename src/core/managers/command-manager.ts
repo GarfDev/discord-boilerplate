@@ -1,4 +1,4 @@
-import { Client, Message } from "discord.js";
+import { Client, Interaction, Message } from "discord.js";
 import { Command, CommandResponse } from "core/types";
 
 /**
@@ -10,19 +10,16 @@ export class CommandManager {
 
   constructor(client: Client, commandArr: Command[]) {
     const commands: CommandStorage = commandArr.reduce((manager, command) => {
-      if (!manager[command.name]) {
-        command.alias.forEach((alias) => {
-          if (!manager[alias]) {
-            manager[alias] = command.execute;
-          }
+      command.alias.forEach((alias) => {
+        if (manager[alias]) {
           throw Error(
             `COMMAND NAMED ${command.name} HAVE THE SAME ALIAS WITH OTHER COMMAND`
           );
-        });
-        throw Error(
-          `COMMAND NAMED ${command.name} HAVE THE SAME NAME WITH OTHER COMMAND`
-        );
-      }
+        }
+
+        manager[alias] = command.execute;
+      });
+
       return manager;
     }, {});
 
@@ -30,9 +27,15 @@ export class CommandManager {
     this.commands = commands;
   }
 
-  public execute(alias: string, message: Message): CommandResponse {
+  public async execute(
+    alias: string,
+    message: Message | Interaction
+  ): Promise<CommandResponse> {
     const executor = this.commands[alias];
-    if (executor) return executor(message);
+    if (executor) {
+      const response = await executor(message);
+      return response;
+    }
   }
 }
 
@@ -40,6 +43,6 @@ export class CommandManager {
  * Types
  */
 
- export interface CommandStorage {
+export interface CommandStorage {
   [alias: string]: Command["execute"];
 }

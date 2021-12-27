@@ -2,10 +2,10 @@ import { Command } from "core/types/Command";
 
 const ping: Command = {
   name: "ping",
-  alias: ['ping', 'p'],
+  alias: ["ping", "p"],
   description: "return pong when call",
-  execute: (message) => {
-    message.channel.send("Pong");
+  execute: async (message) => {
+    return 'Pong!'
   },
 };
 

@@ -1,22 +1,25 @@
 import fs from "fs";
 import { REST } from "@discordjs/rest";
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder } from "@discordjs/builders";
 import { Routes } from "discord-api-types/v9";
+import { Command } from "core/types";
 import { staticPath } from "core/utils";
 import { config } from "configs";
 
 const commandPath = staticPath("commands");
 const commandFiles = fs.readdirSync(commandPath);
 
-const commands = commandFiles.map((filename) => {
+export const commands: Command[] = commandFiles.map((filename) => {
   const file = require(staticPath(`commands/${filename}`)).default;
+  return file;
+});
 
-  const data = new SlashCommandBuilder().
-  setName(file.name)
-  .setDescription(file.description)
-  .toJSON();
+const slashCommands = commands.map((file) => {
+  const data = new SlashCommandBuilder()
+    .setName(file.name)
+    .setDescription(file.description)
+    .toJSON();
   return data;
-
 });
 
 export const slashRegister = async (clientId: string) => {
@@ -25,7 +28,7 @@ export const slashRegister = async (clientId: string) => {
   try {
     console.log("Started refreshing application (/) commands.");
     await rest.put(Routes.applicationCommands(clientId || ""), {
-      body: commands,
+      body: slashCommands,
     });
 
     console.log("Successfully reloaded application (/) commands.");
