@@ -27,6 +27,10 @@ export class CommandManager {
     this.commands = commands;
   }
 
+  public check(alias: string): boolean {
+    return !!this.commands[alias];
+  }
+
   public async execute(
     alias: string,
     message: Message | Interaction
