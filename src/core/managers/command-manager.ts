@@ -20,6 +20,7 @@ export class CommandManager {
         manager[alias] = command.execute;
       });
 
+      console.log(`Command *${command.name}* and it alias is successfully loaded!`)
       return manager;
     }, {});
 
